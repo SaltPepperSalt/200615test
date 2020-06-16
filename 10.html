@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Toast UI</title>
+  <style>
+  @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+  body {
+    font-family: 'Open Sans';
+    font-weight: 300;
+    background-color: #D6E1E5;
+    overflow: hidden;
+  }
+
+  h1 {
+    color: #DB5B33;
+    font-weight: 300;
+    text-align: center;
+  }
+
+
+  .toast-container {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  @keyframes ani {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: none
+    }
+  }
+  .toast {
+    position: relative;
+    animation: ani 1s;
+    width: 500px;
+    height: 200px;
+    background-color: #fff;
+  }
+  .toast span {
+   font-weight: 700;
+   font-size: 20px;
+   display: block;
+  }
+  .success {
+    background-color: green;
+  }
+  .error {
+    background-color: red;
+  }
+  .warning {
+    background-color: yellow;
+  }
+
+  .close-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: transparent;
+    font-size: 30px;
+    border: none;
+    z-index: 30;
+  }
+  /* CSS 작성 바랍니다. */
+  </style>
+</head>
+<body>
+  <h1>JavaScript Toast</h1>
+
+  <button class="show-success">Success</button>
+  <button class="show-error">Error</button>
+  <button class="show-warning">Warning</button>
+
+  <div class="toast-container"></div>
+  <script>
+    const $toastContainer = document.querySelector('.toast-container');
+    const $successBtn = document.querySelector('.show-success');
+    const $errorBtn = document.querySelector('.show-error');
+    const $warningBtn = document.querySelector('.show-warning');
+
+    let lists = [];
+
+    const queue = (() => {
+      return {
+        push(item) {
+          lists.push(item)
+        },
+        pop() {
+          lists.shift()
+        }
+      }
+    })();
+
+    const createToast = (state, stateText, alertText) => {
+      const $div = document.createElement('div');
+      $div.classList.add('toast', `${state}`);
+
+      const $span = document.createElement('span');
+      const $spanText = document.createTextNode(`${stateText}`)
+      $span.appendChild($spanText);
+
+      const $text = document.createTextNode(`${alertText}`);
+
+      const $closeBtn = document.createElement('button');
+      const $buttonText = document.createTextNode('X');
+      $closeBtn.appendChild($buttonText);
+      $closeBtn.classList.add('close-button');
+
+      $div.appendChild($span);
+      $div.appendChild($text);
+      $div.appendChild($closeBtn);
+
+      queue.push($div)
+      $toastContainer.appendChild($div);
+
+      setTimeout(() => {
+        lists = lists.map(list => list !== $div);
+        $toastContainer.removeChild($div);
+      }, 3000);
+    };
+
+    $successBtn.onclick = () => {
+      createToast('success', 'Well done!', 'This is a success alert')
+    };
+    $errorBtn.onclick = () => {
+      createToast('error', 'Check it out!', 'This is an error alert')
+    };
+    $warningBtn.onclick = () => {
+      createToast('warning', 'Check it out!', 'This is an warning alert')
+    };
+
+    $toastContainer.onclick = e => {
+      if (!e.target.matches('.close-button')) return;
+      lists = lists.map(list => list !== e.target.parentNode);
+      $toastContainer.removeChild(e.target.parentNode);
+    };
+
+  </script>
+</body>
+</html>
