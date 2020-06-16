@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stop watch</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+    .stop-watch {
+      font-family: 'Source Code Pro', monospace;
+      text-align: center;
+      font-size: 3em;
+      padding: 30px;
+    }
+
+    .control {
+      width: 300px;
+      padding: 5px;
+      margin-top: 15px;
+      font-size: 36px;
+      font-weight: bold;
+      border: 2px solid #f44336;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .control:hover {
+      background: #f44336;
+      color: aliceblue;
+    }
+  </style>
+  <title>Stop watch</title>
+</head>
+
+<body>
+  <div class="stop-watch">
+    <div class="display">00:00:00</div>
+    <button class="control">Start</button>
+  </div>
+  <script>
+    const $display = document.querySelector('.display');
+    const $control = document.querySelector('.control');
+
+    let clearCode = 0;
+    let now = 0;
+
+
+    const init = () => {
+      const now = Date.now();
+    };
+
+    const getMin = seconds => {
+      return seconds / 60 < 1 ? '00' : seconds / 60 < 10 ? '0' + Math.floor(seconds / 60) : Math.floor(seconds / 60);
+    };
+    
+    const getSec = seconds => {
+      return seconds % 60 < 1 ? '00' : seconds % 60 < 10 ? '0' + seconds % 60 : seconds % 60;
+    };
+
+    const getMilsec = time => {
+      return time % 1000 / 10 < 10 ? '0' + Math.floor(time % 1000 / 10) : Math.floor(time % 1000 / 10);
+    };
+
+    const getTime = now => {
+      const clearCode = setInterval(() => {
+        const time = Date.now() - now;
+        const seconds = Math.floor(time / 1000);
+        $display.textContent = `${getMin(seconds)}:${getSec(seconds)}:${getMilsec(time)}`;
+      });
+      return clearCode;
+    }
+
+ 
+    const timer = () => {
+      let now = 0;
+      let clearCode = 0;
+
+      if ($display.textContent === '00:00:00') now = Date.now();
+      if ($control.textContent === 'Start') {
+        $control.textContent = 'Stop';
+        clearCode = getTime(now);
+      } else {
+        $control.textContent = 'Start';
+        clearInterval(clearCode);
+      }
+    };
+    
+    $control.onclick = timer;
+  </script>
+</body>
+
+</html>
