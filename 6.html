@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Popup</title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+    body {
+      font-family: 'Open Sans';
+      font-weight: 300;
+      background-color: #D6E1E5;
+    }
+
+    h1 {
+      color: #DB5B33;
+      font-weight: 300;
+      text-align: center;
+    }
+    .popup {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 40px;
+      z-index: 10;
+      font-size: 20px;
+    }
+    .btn-close {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: transparent;
+      border: none;
+      font-size: 20px;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    .popup-message {
+      font-size: 30px;
+    }
+    /* CSS 작성 바랍니다. */
+  </style>
+</head>
+<body>
+  <h1>JavaScript Popup</h1>
+
+  <div class="popup">
+    <h1>JavaScript Popup</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+    <button class="btn-close">X</button>
+    <input type="text">
+    <button class="btn-ok">OK</button>
+    <button class="btn-cancel">Cancel</button>
+  </div>
+  <div class="overlay"></div>
+
+  <button class="toggle-popup">show popup</button>
+
+  <p class="popup-message"></p>
+  <script>
+    const $popup = document.querySelector('.popup');
+    const $btnClose = document.querySelector('.btn-close');
+    const $btnOk = document.querySelector('.btn-ok');
+    const $btnCancel = document.querySelector('.btn-cancel');
+    const $overlay = document.querySelector('.overlay');
+    const $togglePopup = document.querySelector('.toggle-popup');
+    const $popupMessage = document.querySelector('.popup-message');
+
+    const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.3)';
+
+    const togglePopup = display => {
+      $popup.style.display = display;
+      $overlay.style.display = display;
+    }
+
+    $btnClose.onclick = togglePopup('none');
+
+    $btnOk.onclick = () => {
+      $popupMessage.textContent = `from popup : ${$btnOk.previousElementSibling.value}`;
+      $btnOk.previousElementSibling.value = '';
+      togglePopup('none');
+    }
+
+    $btnCancel.onclick =  togglePopup('none');
+    
+    $overlay.onclick =  togglePopup('none');
+
+    $togglePopup.onclick = () => {  
+      togglePopup('block');
+      $overlay.style.backgroundColor = OVERLAY_COLOR;
+    }
+
+
+  </script>
+</body>
+</html>
